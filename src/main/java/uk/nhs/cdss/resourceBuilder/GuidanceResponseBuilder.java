@@ -5,31 +5,12 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import org.hl7.fhir.dstu3.model.CareConnectAnnotation;
-import org.hl7.fhir.dstu3.model.CarePlan;
-import org.hl7.fhir.dstu3.model.CodeableConcept;
-import org.hl7.fhir.dstu3.model.Coding;
-import org.hl7.fhir.dstu3.model.DataRequirement;
-import org.hl7.fhir.dstu3.model.DateTimeType;
-import org.hl7.fhir.dstu3.model.GuidanceResponse;
+import org.apache.commons.lang3.time.DateUtils;
+import org.hl7.fhir.dstu3.model.*;
 import org.hl7.fhir.dstu3.model.GuidanceResponse.GuidanceResponseStatus;
-import org.hl7.fhir.dstu3.model.Immunization;
-import org.hl7.fhir.dstu3.model.MedicationAdministration;
-import org.hl7.fhir.dstu3.model.Observation;
-import org.hl7.fhir.dstu3.model.Parameters;
 import org.hl7.fhir.dstu3.model.Parameters.ParametersParameterComponent;
-import org.hl7.fhir.dstu3.model.Practitioner;
-import org.hl7.fhir.dstu3.model.ProcedureRequest;
-import org.hl7.fhir.dstu3.model.Provenance;
-import org.hl7.fhir.dstu3.model.QuestionnaireResponse;
-import org.hl7.fhir.dstu3.model.Reference;
-import org.hl7.fhir.dstu3.model.ReferralRequest;
-import org.hl7.fhir.dstu3.model.RequestGroup;
 import org.hl7.fhir.dstu3.model.RequestGroup.RequestIntent;
 import org.hl7.fhir.dstu3.model.RequestGroup.RequestStatus;
-import org.hl7.fhir.dstu3.model.ResourceType;
-import org.hl7.fhir.dstu3.model.ServiceDefinition;
-import org.hl7.fhir.dstu3.model.StringType;
 import org.hl7.fhir.exceptions.FHIRException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -390,19 +371,29 @@ public class GuidanceResponseBuilder {
 		referralRequest.setStatus(ReferralRequest.ReferralRequestStatus.ACTIVE);
 		referralRequest.setPriority(ReferralRequest.ReferralPriority.ROUTINE);
 
-		referralRequest.setOccurrence(new DateTimeType(new Date()));
+		Period period = new Period();
+		Date occurrence = new Date();
+		period.setStartElement(new DateTimeType(occurrence));
+		period.setEndElement(new DateTimeType(DateUtils.addMinutes(occurrence, 60)));
+		referralRequest.setOccurrence(period);
+
+		//referralRequest.setOccurrence(new DateTimeType(new Date()));
 
 		String description = result.getActivityFirstRep().getOutcomeCodeableConceptFirstRep().getCodingFirstRep()
 				.getDisplay();
 		referralRequest.setDescription(description);
 
-		Coding coding = new Coding().setCode("360");
-		coding.setSystem("SG");
-		referralRequest.addServiceRequested().setCoding(Collections.singletonList(coding));
+		referralRequest.addNote().setText("SD:14023|14023");
+		referralRequest.addNote().setText("DX:Dx02|Dx02");
+		referralRequest.addNote().setText("OutcomeGroup:SP_Accident_and_emergency|ED");
 
-		Coding coding2 = new Coding().setCode("14023");
-		coding2.setSystem("SD");
-		referralRequest.addServiceRequested().setCoding(Collections.singletonList(coding2));
+		//Coding coding = new Coding().setCode("360");
+		//coding.setSystem("SG");
+		//referralRequest.addServiceRequested().setCoding(Collections.singletonList(coding));
+
+		//Coding coding2 = new Coding().setCode("14023");
+		//coding2.setSystem("SD");
+		//referralRequest.addServiceRequested().setCoding(Collections.singletonList(coding2));
 
 		CodeableConcept codeableConcept = new CodeableConcept();
 		codeableConcept.addCoding().setCode("cardio");
