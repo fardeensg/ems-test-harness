@@ -1,6 +1,6 @@
 version: '3.2'
 services:
-  cdss-mysql:
+  mysql:
     build: 
       context: .
       dockerfile: Dockerfile.mysql
@@ -8,11 +8,11 @@ services:
     ports: 
       - "3306:3306"
 
-  cdss-app:
-    image:
-      registry.gitlab.com/pvandermerwe/cdss-supplier-stub:latest
-    environment: 
-      - SPRING_DATASOURCE_URL=jdbc:mysql://cdss-mysql:3306/cdss_supplier
+  app:
+    build:
+      context: .
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/cdss_supplier
     ports: 
       - "8080:8080"
     restart: on-failure:5
