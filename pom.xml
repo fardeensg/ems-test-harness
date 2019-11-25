@@ -24,6 +24,14 @@
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>
+			<id>central</id>
+			<name>Central Repository</name>
+			<url>https://repo.maven.apache.org/maven2</url>
+		</repository>
+		<repository>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
 			<id>bintray-ems-test-harness-EMS-Test-Harness</id>
 			<name>bintray</name>
 			<url>https://dl.bintray.com/ems-test-harness/EMS-Test-Harness</url>
@@ -110,14 +118,6 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
-			<plugin>
-			  <groupId>org.springframework.boot.docker</groupId>
-	          <artifactId>cdss-docker</artifactId>
-	          <version>1.4.9</version>
-	          <configuration>
-	              <repository>${docker.image.prefix}/${project.artifactId}</repository>
-	          </configuration>
 			</plugin>
 		</plugins>
 		<finalName>${project.artifactId}</finalName>
